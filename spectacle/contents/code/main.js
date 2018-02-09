@@ -154,7 +154,7 @@
     }
         
     function registerKeys() {
-        var str = 'Spectacle: Move active window left';
+        var str = 'Spectacle: Cycle Left';
         print('Registering action for...', str);
         var res = registerShortcut(str, str, 'Ctrl+Meta+Left', function() {
             print('Recieved key combo: Ctrl+Meta+Left...');
@@ -165,7 +165,7 @@
         if (res === false)
             print('Failed to register shortcut');
         
-        str = 'Spectacle: Move active window right';
+        str = 'Spectacle: Cycle Right';
         print('Registering action for...', str);
         res = registerShortcut(str, str, 'Ctrl+Meta+Right', function() {
             print('Recieved key combo: Ctrl+Meta+Right...');
