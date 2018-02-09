@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Spectacle
+
+X-Plasma-API=javascript
+X-Plasma-MainScript=code/main.js
+
+X-KDE-PluginInfo-Author=Shane Pearlman
+X-KDE-PluginInfo-Name=spectacle
+X-KDE-PluginInfo-Version=0.1.0
+X-KDE-PluginInfo-License=MIT
+
+X-KDE-ServiceTypes=KWin/Script
