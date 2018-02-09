@@ -111,52 +111,48 @@
         }
     }
     
-    var cycleActiveClient = (function() {
-        var clientMap = {};
-        
-        function cycle(sectionSpec) {
-            var client = getActiveClient();
-            var geoSpec;
+    var clientMap = {};
+    
+    function cycle(sectionSpec) {
+        var client = getActiveClient();
+        var geoSpec;
 
-            if (clientMap[client] === undefined) {
-                print('Client not yet managed...');
-                
-                print('Registering client cleanup signal...');
-                ws.clientRemoved.connect(function(client_) {
-                    print('Client removed...');
-                    if (client === client_) {
-                        print('Client previously managed; Performing cleanup...');
-                        clientMap[client] = undefined;
-                    }
-                });
-                
-                print('Registering client moved signal...');
-                client.moveResizedChanged.connect(function() {
-                    print('Client moved by user; Unregistering...');
+        if (clientMap[client] === undefined) {
+            print('Client not yet managed...');
+            
+            print('Registering client cleanup signal...');
+            ws.clientRemoved.connect(function(client_) {
+                print('Client removed...');
+                if (client === client_) {
+                    print('Client previously managed; Performing cleanup...');
                     clientMap[client] = undefined;
-                });
-                
+                }
+            });
+            
+            print('Registering client moved signal...');
+            client.moveResizedChanged.connect(function() {
+                print('Client moved by user; Unregistering...');
+                clientMap[client] = undefined;
+            });
+            
+            print('Moving to new section...');
+            geoSpec = GeometrySpec(SizeSpec.ONE_HALF, sectionSpec);
+        } else {
+            print('Client previously managed...');
+            if (clientMap[client].section !== sectionSpec) {
                 print('Moving to new section...');
                 geoSpec = GeometrySpec(SizeSpec.ONE_HALF, sectionSpec);
             } else {
-                print('Client previously managed...');
-                if (clientMap[client].section !== sectionSpec) {
-                    print('Moving to new section...');
-                    geoSpec = GeometrySpec(SizeSpec.ONE_HALF, sectionSpec);
-                } else {
-                    print('Will cycle client size...');
-                    geoSpec = clientMap[client];
-                    geoSpec.size = (geoSpec.size + 1) % 3;
-                }
+                print('Will cycle client size...');
+                geoSpec = clientMap[client];
+                geoSpec.size = (geoSpec.size + 1) % 3;
             }
-            
-            clientMap[client] = geoSpec;
-            moveActiveClient(geoSpec);
         }
         
-        return cycle;
-    })();
-
+        clientMap[client] = geoSpec;
+        moveActiveClient(geoSpec);
+    }
+        
     function registerKeys() {
         var str = 'Spectacle: Move active window left';
         print('Registering action for...', str);
